@@ -1,0 +1,137 @@
+﻿<Window x:Class="VideoTagPlayer.Main.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VideoTagPlayer.Main" 
+        xmlns:vm="clr-namespace:VideoTagPlayer.Main.viewModel"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="VideoExplorer" Height="1080" Width="1920"
+        DataContext="{DynamicResource ViewModelMain}">
+    <Window.Resources>
+        <vm:ViewModelMain x:Key="ViewModelMain"/>
+
+        <Style TargetType="{x:Type ListView}">
+            <!--<span class="code-comment"> Set the ItemTemplate of the ListBox to a DataTemplate which
+           explains how to display an object of type BitmapImage. </span>-->
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Border BorderBrush="Black" BorderThickness="1"
+                            CornerRadius="1" Margin="4">
+                                <Image
+                                Source="{Binding Path=PreviewImage.Visual}"
+                                Stretch="Fill"
+                                Width="256" Height="128"/>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                                        <i:InvokeCommandAction 
+                                            Command="{Binding DataContext.ClickedImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding Id}">
+                                        </i:InvokeCommandAction>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Border>
+                            <ItemsControl ItemsSource="{Binding Path=TagsDescription}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" MaxWidth="256" MaxHeight="26" HorizontalAlignment="Left" ></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Margin="1"></TextBlock>
+                                        <!--<Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding}"></TextBlock>
+                                            <TextBox Text="{Binding AnswerText}" Grid.Column="1" Width="6"/>
+                                        </Grid>-->
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <!--<TextBox Text="{Binding DataContext.NewTag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}" Width="75" HorizontalAlignment="Right">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding DataContext.EnterTag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding Id}"/>
+                                </TextBox.InputBindings>
+                                --><!--<i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="KeyUp">
+                                        <i:InvokeCommandAction 
+                                            Command="{Binding DataContext.EnterTag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding Id}">
+                                        </i:InvokeCommandAction>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>--><!--
+                            </TextBox>-->
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Swap out the default items panel with a WrapPanel so that
+           the images will be arranged with a different layout. -->
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Set this attached property to 'Disabled' so that the 
+           ScrollViewer in the ListBox will never show a horizontal 
+           scrollbar, and the WrapPanel it contains will be constrained 
+           to the width of the ScrollViewer's viewable surface. -->
+            <Setter  Property="ScrollViewer.HorizontalScrollBarVisibility" 
+            Value="Disabled" />
+
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <StackPanel>
+        <StackPanel VerticalAlignment="Top">
+            <Menu Width="Auto" Height="20">
+                <MenuItem Header="_File">
+                    <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140" />
+                        <MenuItem x:Name="AppSave" Header="S_ave" HorizontalAlignment="Left" Width="140" Command="{Binding SaveCommand}" />
+                        <MenuItem x:Name="AppLoad" Header="L_oad" HorizontalAlignment="Left" Width="140" Command="{Binding LoadCommand}" />
+                </MenuItem>
+                <MenuItem Header="_Tools">
+                    <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
+                </MenuItem>
+            </Menu>
+            <Label Content="Label"/>
+        </StackPanel>
+        <StackPanel>
+        <ListView ItemsSource="{Binding Videos}">
+            <!--<ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                </Style>
+            </ListView.ItemContainerStyle>-->
+        </ListView>
+        <TextBox Text="{Binding EnterTag}" Width="75" HorizontalAlignment="Right">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding NewTag}" CommandParameter="1"/>
+            </TextBox.InputBindings>
+        </TextBox>
+            </StackPanel>
+        </StackPanel>
+        <!--<Image x:Name="img" />-->
+        <!--<StackPanel>
+            <Image Source="{Binding DisplayedImagePath2}" />
+        </StackPanel>-->
+        <!--<Image Source="{Binding DisplayedImagePath}" HorizontalAlignment="Left" Margin="0,0,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Bottom" Grid.Row="8" Width="200"  Grid.ColumnSpan="2" />-->
+        <!--<Button Content="Load" HorizontalAlignment="Left" Margin="707,389,0,0" VerticalAlignment="Top" Width="75" Command="{Binding TestCommand}"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="10,10,0,0"/>-->
+
+    </Grid>
+</Window>
