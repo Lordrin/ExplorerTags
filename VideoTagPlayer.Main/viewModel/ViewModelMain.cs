@@ -17,16 +17,14 @@ namespace VideoTagPlayer.Main.viewModel
 {
     public class ViewModelMain : ViewModelBase
     {
-        public ICommand TestCommand { get; set; }
         public ICommand ClickedImage { get; set; }
         public ICommand LoadCommand { get; set; }
         public ICommand SaveCommand { get; set; }
-        public string EnterTag { get; set; }
         public string Message { get; set; }
         public ICommand NewTag { get; set; }
-        private FileLoader _fileLoader;
+        //private FileLoader _fileLoader;
+        private LocalResolver _resolver;
         private Video _selectedvideo;
-        public string Testing { get; set; } = "testing";
 
         private ICommand openDialogCommand = null;
         public ICommand OpenDialogCommand
@@ -58,16 +56,17 @@ namespace VideoTagPlayer.Main.viewModel
             SaveCommand = new Command(async x => await SaveFilesAsync(x));
             this.openDialogCommand = new Command(OnOpenDialog);
 
-            _fileLoader = new FileLoader();
-            FillImages();
-            this.Message = "Test";
+            //_fileLoader = new FileLoader();
+            _resolver = new LocalResolver().Init();
+            _resolver.VideosDatabase.ForEach(x => Videos.Add(new Video(x)));
+            // this.Videos = new ObservableCollection<Video>(_resolver.VideosDatabase.);
+            // FillImages();
 
             foreach (Video video in Videos)
             {
                 video.Tags = new List<Domain.model.Tag>() { Domain.model.Tag.finish, Domain.model.Tag.threeD };
                 video.UpdateTags();
             }
-            Video dummy = new Video(new System.IO.FileInfo("E:\\Gebruiker\\Videos\\PLEASE BULLY ME NAGATORO ( ͡ʘ ͜ʖ ͡ʘ) _MMV_.mp4"));
 
         }
 
@@ -84,12 +83,12 @@ namespace VideoTagPlayer.Main.viewModel
 
         private void LoadFromExplorer(object obj)
         {
-            _fileLoader.OpenDialog();
+            new OpenExplorerDialog().OpenDialog();
         }
 
         private void FillImages()
         {
-            foreach (var path in _fileLoader.Files)
+            foreach (var path in _resolver.VideosDatabase)
             {
                 Videos.Add(new Video(path));
                 RaisePropertyChanged("Videos");
@@ -105,8 +104,8 @@ namespace VideoTagPlayer.Main.viewModel
         public async Task SaveFilesAsync(object id)
         {
             IVideoTagRepository videoTagRepository = new VideoTagRepository(new VideoTagContext());
-            var previous_videos = await videoTagRepository.GetByPathAsync(_fileLoader.LastPath);
-            var allSavedVideos = await videoTagRepository.GetByPathIdAsync(previous_videos.Id);
+            //var previous_videos = await videoTagRepository.GetByPathAsync(_fileLoader.LastPath);
+            //var allSavedVideos = await videoTagRepository.GetByPathIdAsync(previous_videos.Id);
             // TODO
             // add to database
             // _fileLoader.Files

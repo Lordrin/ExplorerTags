@@ -15,34 +15,15 @@ namespace VideoTagPlayer.Main.utility
         public List<FileInfo> Files { get; set; }
         internal string LastPath;
         private readonly string ConfigLocation = "config.ini";
-        private IVideoTagRepository _tagRepository;
 
-        public FileLoader()
+        public void LoadFiles()
         {
             Files = new List<FileInfo>();
             LoadLastPath();
-            if(!LastPath.Equals("") && LastPath != null)
+            if (!LastPath.Equals("") && LastPath != null)
             {
                 LoadFromDisk(this.LastPath);
             }
-        }
-        public void OpenDialog()
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog
-            {
-                Filter = "( *.mp4) |  *.mp4",
-                FilterIndex = 1
-            };
-            // openFileDialog1.Multiselect = true;
-
-            if (openFileDialog1.ShowDialog() == true)
-            {
-                string sFileName = openFileDialog1.FileName;
-                //string[] arrAllFiles = openFileDialog1.FileNames; //used when Multiselect = true  
-                string folderPath = Path.GetDirectoryName(sFileName);
-                LoadFromDisk(folderPath);
-            }
-
         }
         private void UpdateConfig(string path)
         {
@@ -56,7 +37,7 @@ namespace VideoTagPlayer.Main.utility
             }
             File.WriteAllLines(ConfigLocation, arrLine);
         }
-        private void LoadFromDisk(String path)
+        internal void LoadFromDisk(String path)
         {
             if (!path.Equals(this.LastPath))
             {
@@ -67,9 +48,6 @@ namespace VideoTagPlayer.Main.utility
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(path);
                 this.Files = directoryInfo.GetFilesByExtensions(".mp4").ToList();
-                // check and add to database
-                // add path to table
-                // var databaseFiles = 
             }
             catch (Exception)
             {

@@ -17,7 +17,7 @@ namespace VideoTagPlayer.DataLayer
             _context = context;
         }
 
-        public async Task<IList<Video>> GetAllAsync()
+        public async Task<IList<Video>> GetAllVideoAsync()
         {
             return await _context.Videos.ToListAsync();
         }
@@ -30,6 +30,11 @@ namespace VideoTagPlayer.DataLayer
         public async Task<VideoPath> GetByPathAsync(string path)
         {
             return await _context.VideoPaths.FirstOrDefaultAsync(r => r.Path.Equals(path));
+        }
+
+        public async Task<IList<Video>> GetVideosByPathIdAsync(int pathId)
+        {
+            return await _context.Videos.Where(r => r.PathId.Equals(pathId)).ToListAsync();
         }
 
         public async Task<Video> AddAsync(Video review)
@@ -64,29 +69,30 @@ namespace VideoTagPlayer.DataLayer
             throw new NotImplementedException();
         }
 
-        public Video GetById(int id)
+        public async Task<IList<VideoPath>> GetAllVideoPathAsync()
         {
-            throw new NotImplementedException();
+            return await _context.VideoPaths.ToListAsync();
         }
 
-        public Video Add(Video restaurant)
+        public async Task<IList<Video>> GetByPathIdAsync(int pathId)
         {
-            throw new NotImplementedException();
+            return await _context.Videos.Where(r => r.PathId == pathId).ToListAsync();
         }
 
-        public void Update(Video restaurant)
+        public async Task<VideoPath> AddVideoPathAsync(VideoPath videoPath)
         {
-            throw new NotImplementedException();
+            _context.VideoPaths.Add(videoPath);
+
+            await _context.SaveChangesAsync();
+
+            return videoPath;
         }
 
-        public void Delete(int id)
+        public async Task<IList<Video>> AddRangeAsync(IEnumerable<Video> videos)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Video> GetByPathIdAsync(int pathId)
-        {
-            return await _context.Videos.FirstOrDefaultAsync(r => r.PathId == pathId);
+            _context.Videos.AddRange(videos);
+            await _context.SaveChangesAsync();
+            return videos as List<Video>;
         }
     }
 }

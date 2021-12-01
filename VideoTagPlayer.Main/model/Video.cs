@@ -36,9 +36,25 @@ namespace VideoTagPlayer.Main.model
             UpdateTags();
 
         }
+        public Video(VideoTagPlayer.Domain.model.Video video)
+        {
+            this.Tags = video.Tags;
+            this.Name = video.Name;
+            this.Id = video.Id;
+            this.Path = video.Path;
+            this.PathId = video.PathId;
+            this.PreviewImage = new PreviewImage(ShellFile.FromFilePath(Path.FullName.ToString()).Thumbnail.BitmapSource);
+            TagsDescription = new ObservableCollection<string>();
+            UpdateTags();
+        }
         public void UpdateTags()
         {
-            this.Tags.ForEach(c => TagsDescription.Add(ExtensionCustom.GetEnumDescription(c)));
+            this.Tags.ForEach(c => 
+            {
+                TagsDescription.Add(ExtensionCustom.GetEnumDescription(c));
+                TagsWithDescriptionList.Add(ExtensionCustom.GetEnumDescription(c));
+            });
+
         }
     }
 }

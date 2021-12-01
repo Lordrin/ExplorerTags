@@ -10,6 +10,7 @@ namespace VideoTagPlayer.Domain.model
         public string Name { get; set; }
         public List<Tag> Tags { get; set; }
         public int PathId { get; set; }
+        public List<string> TagsWithDescriptionList { get; set; }
 
     }
 }

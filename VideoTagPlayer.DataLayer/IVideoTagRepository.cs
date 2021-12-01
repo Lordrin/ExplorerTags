@@ -9,16 +9,16 @@ namespace VideoTagPlayer.DataLayer
     public interface IVideoTagRepository
     {
         IEnumerable<Video> GetAll();
-        Video GetById(int id);
-        Video Add(Video restaurant);
-        void Update(Video restaurant);
-        void Delete(int id);
 
-        Task<IList<Video>> GetAllAsync();
+        Task<IList<Video>> GetAllVideoAsync();
+        Task<IList<VideoPath>> GetAllVideoPathAsync();
         Task<Video> GetByIdAsync(int id);
-        Task<Video> GetByPathIdAsync(int id);
-        Task<Video> AddAsync(Video review);
-        Task UpdateAsync(Video review);
+        Task<IList<Video>> GetByPathIdAsync(int id);
+        Task<IList<Video>> GetVideosByPathIdAsync(int pathId);
+        Task<Video> AddAsync(Video video);
+        Task<IList<Video>> AddRangeAsync(IEnumerable<Video> video);
+        Task<VideoPath> AddVideoPathAsync(VideoPath videoPath);
+        Task UpdateAsync(Video video);
         Task DeleteAsync(int id);
         Task<VideoPath> GetByPathAsync(string path);
     }

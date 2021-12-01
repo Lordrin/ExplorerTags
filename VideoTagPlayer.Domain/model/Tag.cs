@@ -4,15 +4,15 @@ namespace VideoTagPlayer.Domain.model
 {
     public enum Tag
     {
-        music,
-        finish,
+        music = 1,
+        finish = 2,
         [Description("2D")]
-        twoD,
+        twoD = 3,
         [Description("3D")]
-        threeD,
-        full,
-        MMV,
-        HMV,
-        PMV,
+        threeD = 4,
+        full = 5,
+        MMV = 6,
+        HMV = 7,
+        PMV = 8, 
     }
 }
