@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using VideoTagPlayer.Domain.model;
+using VideoTagPlayer.Main.model;
 using VideoTagPlayer.Main.utility;
 
 namespace VideoTagPlayer.Main.dialogService
@@ -19,6 +19,7 @@ namespace VideoTagPlayer.Main.dialogService
             get { return _tags; }
             set { _tags = value; }
         }
+        
         private ICommand yesCommand = null;
         public ICommand YesCommand
         {
@@ -33,11 +34,10 @@ namespace VideoTagPlayer.Main.dialogService
             set { noCommand = value; }
         }
 
-        public DialogYesNoViewModel(string message, ObservableCollection<string> tags) : base(message)
+        public DialogYesNoViewModel(string message, Video video) : base(message, video)
         {
             this.yesCommand = new Command(OnYesClicked);
             this.noCommand = new Command(OnNoClicked);
-            this.Tags = tags;
         }
 
         private void OnYesClicked(object parameter)

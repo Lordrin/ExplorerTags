@@ -24,5 +24,10 @@ namespace VideoTagPlayer.Main.dialogService
         {
             InitializeComponent();
         }
+
+        private void TextBox_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+
+        }
     }
 }

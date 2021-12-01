@@ -26,6 +26,7 @@ namespace VideoTagPlayer.Main.viewModel
         public ICommand NewTag { get; set; }
         private FileLoader _fileLoader;
         private Video _selectedvideo;
+        public string Testing { get; set; } = "testing";
 
         private ICommand openDialogCommand = null;
         public ICommand OpenDialogCommand
@@ -66,11 +67,13 @@ namespace VideoTagPlayer.Main.viewModel
                 video.Tags = new List<Domain.model.Tag>() { Domain.model.Tag.finish, Domain.model.Tag.threeD };
                 video.UpdateTags();
             }
+            Video dummy = new Video(new System.IO.FileInfo("E:\\Gebruiker\\Videos\\PLEASE BULLY ME NAGATORO ( ͡ʘ ͜ʖ ͡ʘ) _MMV_.mp4"));
+
         }
 
         private void OnOpenDialog(object parameter)
         {
-            DialogViewModelBase vm = new DialogYesNoViewModel("Question", Tags);
+            DialogViewModelBase vm = new DialogYesNoViewModel("Question", parameter as Video);
             DialogResult result = DialogService.OpenDialog(vm, parameter as Window);
         }
 

@@ -3,17 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:VideoTagPlayer.Main.dialogService"
+             xmlns:local="clr-namespace:VideoTagPlayer.Main.dialogService" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:vm="clr-namespace:VideoTagPlayer.Main.dialogService"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="300">
+             d:DesignHeight="450" d:DesignWidth="450">
     <Grid Margin="4">
-        <Label Content="{Binding Message}"></Label>
-        <ListView ItemsSource="{Binding Tags}"></ListView>
-        <Button Content="Yes" HorizontalAlignment="Left" Margin="135,70,0,0" VerticalAlignment="Top" Width="75"   
-        Command="{Binding YesCommand}"   
-        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
-        <Button Content="No" HorizontalAlignment="Left" Margin="215,70,0,0" VerticalAlignment="Top" Width="75"   
-        Command="{Binding NoCommand}"  
-        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding SelectedVideo.Name}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top"></TextBlock>
+        <Image Source="{Binding SelectedVideo.PreviewImage.Visual}" Stretch="Uniform" MinWidth="256" Height="128" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding NewTag, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="0" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding AddTagCommand}" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="6" Grid.Column="6">
+            <Button Content="Yes" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="0,0,5,0" Command="{Binding YesCommand}"   
+            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Button Content="{Binding Path=SelectedVideo.Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="0,0,5,0" Command="{Binding NoCommand}"  
+            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

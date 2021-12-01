@@ -124,7 +124,7 @@
                         <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
                     </MenuItem>
                 </Menu>
-                <Label Content="Label"/>
+                <Label Content="{Binding Testing}"/>
             </StackPanel>
             <StackPanel>
                 <ListView ItemsSource="{Binding Videos}">
