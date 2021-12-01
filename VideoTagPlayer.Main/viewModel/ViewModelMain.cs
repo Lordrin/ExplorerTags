@@ -10,10 +10,12 @@ using VideoTagPlayer.Main.model;
 using VideoTagPlayer.Main.utility;
 using VideoTagPlayer.Main.videoPlayer;
 using VideoTagPlayer.DataLayer;
+using VideoTagPlayer.Main.dialogService;
+using System.Windows;
 
 namespace VideoTagPlayer.Main.viewModel
 {
-    public class ViewModelMain :ViewModelBase
+    public class ViewModelMain : ViewModelBase
     {
         public ICommand TestCommand { get; set; }
         public ICommand ClickedImage { get; set; }
@@ -25,17 +27,19 @@ namespace VideoTagPlayer.Main.viewModel
         private FileLoader _fileLoader;
         private Video _selectedvideo;
 
-        public Video SelectedVideo 
-        { 
-            get
-            {
-                return _selectedvideo;
-            }
-            set
-            {
-                _selectedvideo = value;
-            }
+        private ICommand openDialogCommand = null;
+        public ICommand OpenDialogCommand
+        {
+            get { return this.openDialogCommand; }
+            set { this.openDialogCommand = value; }
         }
+
+        public Video SelectedVideo
+        {
+            get { return _selectedvideo; } 
+            set { _selectedvideo = value;}
+        }
+
 
         public ObservableCollection<PreviewImage> Images;
         public ObservableCollection<Video> Videos { get; set; }
@@ -46,21 +50,28 @@ namespace VideoTagPlayer.Main.viewModel
             Images = new ObservableCollection<PreviewImage>();
             Videos = new ObservableCollection<Video>();
             Tags = new ObservableCollection<string>();
-            
+
             ClickedImage = new Command(StartProcess);
             LoadCommand = new Command(LoadFromExplorer);
             NewTag = new Command(x => NewTagEntered(x));
             SaveCommand = new Command(async x => await SaveFilesAsync(x));
+            this.openDialogCommand = new Command(OnOpenDialog);
 
             _fileLoader = new FileLoader();
             FillImages();
             this.Message = "Test";
-            
+
             foreach (Video video in Videos)
             {
                 video.Tags = new List<Domain.model.Tag>() { Domain.model.Tag.finish, Domain.model.Tag.threeD };
                 video.UpdateTags();
-            }          
+            }
+        }
+
+        private void OnOpenDialog(object parameter)
+        {
+            DialogViewModelBase vm = new DialogYesNoViewModel("Question", Tags);
+            DialogResult result = DialogService.OpenDialog(vm, parameter as Window);
         }
 
         public void NewTagEntered(object id)
@@ -80,7 +91,7 @@ namespace VideoTagPlayer.Main.viewModel
                 Videos.Add(new Video(path));
                 RaisePropertyChanged("Videos");
                 Images.Add(Videos.Last().PreviewImage);
-                RaisePropertyChanged("Images");              
+                RaisePropertyChanged("Images");
             }
         }
 

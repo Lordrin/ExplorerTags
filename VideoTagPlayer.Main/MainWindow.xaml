@@ -19,21 +19,23 @@
                 <Setter.Value>
                     <DataTemplate>
                         <StackPanel>
-                            <Border BorderBrush="Black" BorderThickness="1"
+                            <ContentControl>
+                                <Border BorderBrush="Black" BorderThickness="1"
                             CornerRadius="1" Margin="4">
-                                <Image
+                                    <Image
                                 Source="{Binding Path=PreviewImage.Visual}"
                                 Stretch="Fill"
                                 Width="256" Height="128"/>
+                                </Border>
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                                    <i:EventTrigger EventName="MouseDoubleClick">
                                         <i:InvokeCommandAction 
                                             Command="{Binding DataContext.ClickedImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding Id}">
                                         </i:InvokeCommandAction>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </Border>
+                            </ContentControl>
                             <ItemsControl ItemsSource="{Binding Path=TagsDescription}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -58,14 +60,16 @@
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding DataContext.EnterTag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding Id}"/>
                                 </TextBox.InputBindings>
-                                --><!--<i:Interaction.Triggers>
+                                -->
+                            <!--<i:Interaction.Triggers>
                                     <i:EventTrigger EventName="KeyUp">
                                         <i:InvokeCommandAction 
                                             Command="{Binding DataContext.EnterTag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
                                             CommandParameter="{Binding Id}">
                                         </i:InvokeCommandAction>
                                     </i:EventTrigger>
-                                </i:Interaction.Triggers>--><!--
+                                </i:Interaction.Triggers>-->
+                            <!--
                             </TextBox>-->
                         </StackPanel>
                     </DataTemplate>
@@ -90,39 +94,57 @@
             Value="Disabled" />
 
         </Style>
+        <!-- Having CommandParameter is crucial here -->
+        <!--<ContextMenu x:Key="contextMenu">
+            <MenuItem Header="View"
+                      Click="View_OnClick"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
+            <MenuItem Header="Edit"
+                      Click="Edit_OnClick"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}" />
+            <MenuItem Header="Delete"
+                      Click="Delete_OnClick"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
+        </ContextMenu>-->
     </Window.Resources>
-    
+
     <Grid>
         <StackPanel>
-        <StackPanel VerticalAlignment="Top">
-            <Menu Width="Auto" Height="20">
-                <MenuItem Header="_File">
-                    <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140" />
+            <StackPanel VerticalAlignment="Top">
+                <Menu Width="Auto" Height="20">
+                    <MenuItem Header="_File">
+                        <MenuItem x:Name="AppExit" Header="E_xit" HorizontalAlignment="Left" Width="140" />
                         <MenuItem x:Name="AppSave" Header="S_ave" HorizontalAlignment="Left" Width="140" Command="{Binding SaveCommand}" />
                         <MenuItem x:Name="AppLoad" Header="L_oad" HorizontalAlignment="Left" Width="140" Command="{Binding LoadCommand}" />
-                </MenuItem>
-                <MenuItem Header="_Tools">
-                    <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
-                </MenuItem>
-                <MenuItem Header="_Help">
-                    <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
-                </MenuItem>
-            </Menu>
-            <Label Content="Label"/>
-        </StackPanel>
-        <StackPanel>
-        <ListView ItemsSource="{Binding Videos}">
-            <!--<ListView.ItemContainerStyle>
+                    </MenuItem>
+                    <MenuItem Header="_Tools">
+                        <MenuItem x:Name="Options" Header="_Options" HorizontalAlignment="Left" Width="140"/>
+                    </MenuItem>
+                    <MenuItem Header="_Help">
+                        <MenuItem x:Name="About" Header="&amp;About" HorizontalAlignment="Left" Width="140"/>
+                    </MenuItem>
+                </Menu>
+                <Label Content="Label"/>
+            </StackPanel>
+            <StackPanel>
+                <ListView ItemsSource="{Binding Videos}">
+                    <!--<ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
                 </Style>
             </ListView.ItemContainerStyle>-->
-        </ListView>
-        <TextBox Text="{Binding EnterTag}" Width="75" HorizontalAlignment="Right">
-            <TextBox.InputBindings>
-                <KeyBinding Key="Enter" Command="{Binding NewTag}" CommandParameter="1"/>
-            </TextBox.InputBindings>
-        </TextBox>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Edit Tags" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" Command="{Binding OpenDialogCommand}"></MenuItem>
+                            <MenuItem Header="Remove Tag" Command="{Binding RemoveTag}"></MenuItem>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+                <TextBox Text="{Binding EnterTag}" Width="75" HorizontalAlignment="Right">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding NewTag}" CommandParameter="1"/>
+                    </TextBox.InputBindings>
+                </TextBox>
             </StackPanel>
         </StackPanel>
         <!--<Image x:Name="img" />-->

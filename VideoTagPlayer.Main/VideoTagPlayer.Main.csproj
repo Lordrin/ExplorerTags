@@ -74,6 +74,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="dependencyInjection\DependencyContainer.cs" />
+    <Compile Include="dialogService\DialogResult.cs" />
+    <Compile Include="dialogService\DialogService.cs" />
+    <Compile Include="dialogService\DialogViewModelBase.cs" />
+    <Compile Include="dialogService\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="dialogService\DialogYesNoView.xaml.cs">
+      <DependentUpon>DialogYesNoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="dialogService\DialogYesNoViewModel.cs" />
     <Compile Include="model\PreviewImage.cs" />
     <Compile Include="model\Video.cs" />
     <Compile Include="utility\Command.cs" />
@@ -86,6 +96,14 @@
     <Compile Include="viewModel\VideoViewModel.cs" />
     <Compile Include="viewModel\ViewModelBase.cs" />
     <Compile Include="viewModel\ViewModelMain.cs" />
+    <Page Include="dialogService\DialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="dialogService\DialogYesNoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
